@@ -148,28 +148,20 @@ function Portfolio() {
   const next = () => setActive((i) => (i + 1) % projects.length);
   const prev = () => setActive((i) => (i - 1 + projects.length) % projects.length);
 
-  const wheelLockRef = useRef(0);
-  // Non-passive wheel listener so preventDefault works
-  useEffect(() => {
-    const el = stageRef.current;
-    if (!el) return;
-    const handler = (e: WheelEvent) => {
-      if (focused !== null) return;
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      if (Math.abs(delta) < 8) return;
-      const now = Date.now();
-      if (now - wheelLockRef.current < 450) {
-        e.preventDefault();
-        return;
-      }
-      wheelLockRef.current = now;
-      e.preventDefault();
-      if (delta > 0) next();
-      else prev();
-    };
-    el.addEventListener("wheel", handler, { passive: false });
-    return () => el.removeEventListener("wheel", handler);
-  }, [focused]);
+  // Drag / swipe navigation on the 3D stage (does not hijack page scroll)
+  const dragRef = useRef<{ startX: number; dragging: boolean }>({ startX: 0, dragging: false });
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (focused !== null) return;
+    dragRef.current = { startX: e.clientX, dragging: true };
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!dragRef.current.dragging) return;
+    const dx = e.clientX - dragRef.current.startX;
+    dragRef.current.dragging = false;
+    if (Math.abs(dx) < 60) return;
+    if (dx < 0) next();
+    else prev();
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -193,14 +185,16 @@ function Portfolio() {
             <h2 className="font-serif text-5xl text-text md:text-7xl">Um pequeno acervo.</h2>
           </div>
           <p className="max-w-sm text-text-muted">
-            Peças recentes. Use as setas, deslize ou clique em um card para entrar.
+            Peças recentes. Use as setas, arraste ou clique em um card para entrar.
           </p>
         </div>
 
         {/* Desktop / tablet 3D carousel */}
         <div
           ref={stageRef}
-          className="perspective-stage relative hidden h-[560px] items-center justify-center md:flex"
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          className="perspective-stage relative hidden h-[560px] cursor-grab items-center justify-center active:cursor-grabbing md:flex"
         >
           {projects.map((p, i) => {
             const offset = i - active;
