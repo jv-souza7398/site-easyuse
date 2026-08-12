@@ -117,9 +117,16 @@ function Hero() {
           className="animate-fade-up text-balance font-serif text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text"
           style={{ animationDelay: "120ms" }}
         >
-          Sites que ganham <em className="italic text-text-muted">vida</em>
+          <TextRoll center className="font-serif text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text">
+            Sites que ganham
+          </TextRoll>{" "}
+          <TextRoll center className="font-serif italic text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text-muted">
+            vida
+          </TextRoll>
           <br />
-          e respiram.
+          <TextRoll center className="font-serif text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text">
+            e respiram.
+          </TextRoll>
         </h1>
         <p
           className="animate-fade-up mt-10 max-w-xl text-lg leading-relaxed text-text-muted"
