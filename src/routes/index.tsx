@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useLoop } from "@/components/ui/skiper-ui/skiper62";
 import { TextRoll } from "@/components/ui/skiper-ui/skiper58";
+import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import p1 from "@/assets/project-1.jpg";
 import p2 from "@/assets/project-2.jpg";
