@@ -118,16 +118,13 @@ function Hero() {
           className="animate-fade-up text-balance font-serif text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text"
           style={{ animationDelay: "120ms" }}
         >
-          <TextRoll center className="font-serif text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text">
-            Sites que ganham
-          </TextRoll>{" "}
-          <TextRoll center className="font-serif italic text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text-muted">
-            vida
-          </TextRoll>
-          <br />
-          <TextRoll center className="font-serif text-[clamp(3rem,9vw,9rem)] leading-[0.95] text-text">
-            e respiram.
-          </TextRoll>
+          <span className="block">
+            <HeroTextRoll italic={false}>Sites que ganham</HeroTextRoll>{" "}
+            <HeroTextRoll italic>vida</HeroTextRoll>
+          </span>
+          <span className="block">
+            <HeroTextRoll italic={false}>e respiram.</HeroTextRoll>
+          </span>
         </h1>
         <p
           className="animate-fade-up mt-10 max-w-xl text-lg leading-relaxed text-text-muted"
@@ -147,6 +144,20 @@ function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+function HeroTextRoll({ children, italic }: { children: string; italic?: boolean }) {
+  return (
+    <TextRoll
+      center
+      className={cn(
+        "font-serif text-[clamp(3rem,9vw,9rem)] leading-[0.95]",
+        italic ? "italic text-text-muted" : "text-text"
+      )}
+    >
+      {children.replace(/ /g, "\u00A0")}
+    </TextRoll>
   );
 }
 
