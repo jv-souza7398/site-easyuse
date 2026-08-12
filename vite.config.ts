@@ -34,7 +34,7 @@ export default defineConfig(async ({ command }) => {
     server: {
       host: true,
       // Allow the v0 preview proxy host to reach the dev server.
-      allowedHosts: true,
+      allowedHosts: true as const,
     },
     resolve: {
       alias: {
