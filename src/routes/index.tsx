@@ -414,19 +414,57 @@ function About() {
             cultura e comércio cuidadoso. Trabalhamos em pequenos lotes, tratamos a tipografia como matéria-prima
             e entregamos sites que continuam tão bons quanto parecem — seis meses depois.
           </p>
-          <div className="grid grid-cols-3 gap-6 border-t border-[color:var(--border)] pt-10">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <div className="font-serif text-4xl text-gold md:text-5xl">{s.value}</div>
-                <div className="mt-2 text-[11px] uppercase tracking-[0.2em] text-text-muted">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
+          <StatRotator items={stats} />
         </div>
       </div>
     </section>
+  );
+}
+
+function StatRotator({ items }: { items: { value: string; label: string }[] }) {
+  const { key } = useLoop(2200);
+  const current = items[key % items.length];
+
+  return (
+    <div className="overflow-hidden border-t border-[color:var(--border)] pt-10">
+      <div className="flex items-baseline gap-4">
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={`value-${key}`}
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "-100%" }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="font-serif text-6xl text-gold md:text-7xl"
+          >
+            {current.value}
+          </motion.span>
+          <motion.span
+            key={`label-${key}`}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="max-w-[16ch] text-[11px] uppercase leading-tight tracking-[0.25em] text-text-muted"
+          >
+            {current.label}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+      <div className="mt-8 flex gap-3">
+        {items.map((_, i) => {
+          const active = i === key % items.length;
+          return (
+            <div
+              key={i}
+              className={`h-1 rounded-full transition-all duration-300 ${
+                active ? "w-10 bg-gold" : "w-4 bg-[color:var(--text-muted)]/30"
+              }`}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
